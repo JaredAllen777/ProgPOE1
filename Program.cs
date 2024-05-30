@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
+﻿using ProgPOE;
 /*Welcome to my program, this program was designed under the specifications to be able to take in a users input of a recipe. 
  * The user will be prompted to enter recipe details like how many apples are needed etc. 
  * Next the program is designed to be able to display the recipe once all parameters have been filled.
@@ -10,63 +9,112 @@
  * 
  */
 
-namespace ProgPOE
-{
-    //__________________________________________Start Of File____________________________________________________\\
+//______________________________________________________________________Start Of File_____________________________________________________________________________________________\\
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+
+namespace ProgPOE
+
+//_____________________________________________________________________________________________________________________________________________________________________________________\\
+
+{
     class Program
     {
         static void Main(string[] args)
         {
-            Recipe recipe = new Recipe();
+            List<Recipe> recipes = new List<Recipe>();
 
             while (true)
             {
-                //Creating Menu options for the user that will allow them to do either of the following 
-                Console.WriteLine("Enter: 1 to Enter Recipe Details");
-                Console.WriteLine("Enter: 2 to Display The Recipe");
-                Console.WriteLine("Enter: 3 to Scale Recipe");
-                Console.WriteLine("Enter: 4 to Reset All Quantities");
-                Console.WriteLine("Enter: 5 to Clear The Recipe");
-                Console.WriteLine("Enter: 6 to Exit App");
+                //Displays menu options
+                Console.WriteLine("Welcome to Recipe Manager");
+                Console.WriteLine("1. Enter a New Recipe");
+                Console.WriteLine("2. Display All Recipes");
+                Console.WriteLine("3. Select Recipe by Name");
+                Console.WriteLine("4. Exit");
 
-//______________________________________________________________________________________________________________________________\\
-
-                //Creating switch case for the menu items
+                //Prompts user to make a choice
+                Console.Write("Enter your choice: ");
                 string choice = Console.ReadLine();
+                Console.WriteLine();
+
+//____________________________________________________________________________________________________________________________________________________________________________________\\
+
+                //Processes Users choice
                 switch (choice)
                 {
                     case "1":
-                        recipe.EnterDetails();
+                        //Option 1: User can enter a new recipee
+                        Console.WriteLine("Enter Recipe Details:");
+                        Recipe newRecipe = new Recipe();
+                        newRecipe.EnterDetails();
+                        recipes.Add(newRecipe);
+                        Console.WriteLine("Recipe added successfully.");
+                        Console.WriteLine();
                         break;
                     case "2":
-                        recipe.DisplayRecipe();
+                        //Option 2:Displays all recipes
+                        if (recipes.Count == 0)
+                        {
+                            Console.WriteLine("No recipes found.");
+                        }
+                        else
+                        {
+                            // Sort recipes alphabetically by name before displaying
+                            var sortedRecipes = recipes.OrderBy(r => r.Name);
+                            foreach (var r in sortedRecipes)
+                            {
+                                r.DisplayRecipe();
+                            }
+                        }
+                        Console.WriteLine();
                         break;
                     case "3":
-                        Console.WriteLine("Enter the Scalling Factor (0.5, 2, or 3): ");
-                        double factor = double.Parse(Console.ReadLine());
-                        recipe.ScaleRecipe(factor);
+                        //Option 3: User can select recipe by name
+                        Console.Write("Enter the name of the recipe: ");
+                        string recipeName = Console.ReadLine();
+                        Recipe selectedRecipe = recipes.Find(r => r.Name.Equals(recipeName, StringComparison.OrdinalIgnoreCase));
+                        if (selectedRecipe != null)
+                        {
+                            Console.WriteLine("Selected Recipe:");
+                            selectedRecipe.ManageRecipe();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Recipe not found.");
+                        }
+                        Console.WriteLine();
                         break;
                     case "4":
-                        recipe.ResetQuantity();
+                        //Exits application
+                        Console.WriteLine("Exiting the application...");
+                        Environment.Exit(0);
                         break;
-                    case "5":
-                        recipe.ClearRecipe();
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        Console.WriteLine();
                         break;
-                    case "6":
-                        Console.WriteLine("Invalid Choice");
-                        break;
-
                 }
             }
         }
     }
 }
+
+//_____________________________________________________________________________________________________________________________________________________________________________________\\
+
 /*
- * BIBLIOGRAPHY
+ * REFRENCE LIST
  * https://stackoverflow.com/questions/5678216/all-possible-array-initialization-syntaxes
  * https://www.geeksforgeeks.org/c-sharp-int32-struct/
+ * https://stackoverflow.com/questions/21796119/use-a-list-instead-of-an-array-in-c 
+ * https://www.delftstack.com/howto/csharp/exit-application-in-csharp/#:~:text=To%20use%20the%20Environment.Exit%28%29%20method%2C%20you%20simply%20call,passing%20an%20appropriate%20exit%20code%20as%20an%20argument.
+ * https://stackoverflow.com/questions/188141/listt-orderby-alphabetical-order
+ * https://stackoverflow.com/questions/3801748/select-method-in-listt-collection#:~:text=var%20query1%20%3D%20list.Where%28person%20%3D%3E%20person.Age%20%3E%2030%29%3B,person%27s%20name%20var%20query2%20%3D%20list.Select%28person%20%3D%3E%20person.Name%29%3B
+ * https://advtechonline.sharepoint.com/:w:/r/sites/TertiaryStudents/_layouts/15/Doc.aspx?sourcedoc=%7B755177B9-FEE4-4F9B-832D-6B093222C730%7D&file=PROG6221POE.docx&action=default&mobileredirect=true
  * 
- */ 
+ */
 
-//____________________________________________End Of File________________________________________________________\\
+//______________________End Of File___________________________End Of File_________________________End Of File_________________End Of File____________________End Of File_____________\\
